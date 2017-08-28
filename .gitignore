@@ -1,0 +1,9 @@
+# Gradle files
+.gradle/
+build/
+
+# Intellij
+.idea/
+out/
+
+# Java

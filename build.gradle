@@ -1,0 +1,68 @@
+group 'com.extnds.nemo'
+version '1.0'
+
+buildscript {
+    ext {
+        springBootVersion = '1.5.6.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'org.springframework.boot'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    // MVC Framework
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '1.5.6.RELEASE'
+
+    // Server
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: '1.5.6.RELEASE'
+
+    // BoilerPlate Code Generators
+    compileOnly 'org.projectlombok:lombok:1.16.18'
+
+    // Test Framework
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    // Networking & ORM Framework
+    compile group: 'com.squareup.retrofit2', name: 'retrofit', version: '2.3.0'
+    compile group: 'com.squareup.retrofit2', name: 'converter-gson', version: '2.3.0'
+
+    // Validation Framework
+    compile group: 'org.hibernate', name: 'hibernate-validator', version: '6.0.1.Final'
+    compile group: 'javax.validation', name: 'validation-api', version: '2.0.0.Final'
+
+    // ToDo : Replace with better way to add local dependency
+    compile files('src/main/resources/nemo-models-1.0.jar')
+}
+
+war {
+    baseName = 'nemo-management-service'
+    version =  '1.0.0'
+}
+
+jar {
+    manifest {
+        attributes(
+            'Class-Path': configurations.compile.collect { it.getName() }.join(' '),
+            'Main-Class': 'com.extnds.nemo.website.Application'
+        )
+    }
+}
+
+bootRepackage {
+    withJarTask jar
+}
